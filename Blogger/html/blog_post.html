@@ -1,0 +1,190 @@
+<p>Building scalable and maintainable applications is one of the most important tasks for any developer. Clean Architecture is a proven design pattern that helps achieve this by separating concerns into different layers. In this post, we’ll explore how Clean Architecture works, its benefits, and how it can be applied to a Flutter™ application. We will also go over the main components: <strong>Data</strong>, <strong>Domain</strong>, and <strong>Presentation</strong> layers, and how they can be structured to ensure your app remains testable, scalable, and easy to maintain.</p>
+
+<h3>Why Use Clean Architecture?</h3>
+
+<p>Clean Architecture is a software design pattern introduced by Robert C. Martin, which separates the application into distinct layers, each with a clear responsibility. The goal is to ensure that each part of the application has one responsibility and interacts only with the layers that need it. This provides several key benefits:</p>
+
+<ul>
+    <li><strong>Testability</strong>: By separating concerns into layers, you can test each part independently.</li>
+    <li><strong>Separation of Concerns</strong>: Each layer handles a specific responsibility, making the code more modular and easier to understand.</li>
+    <li><strong>Maintainability</strong>: As the application grows, new features can be added without affecting the existing parts of the system, allowing for easier updates and scalability.</li>
+</ul>
+
+<h3>Key Layers in Clean Architecture</h3>
+
+<p>Clean Architecture is divided into three main layers:</p>
+
+<ul>
+    <li><strong>Presentation Layer</strong>: Handles the user interface and user interaction.</li>
+    <li><strong>Domain Layer</strong>: Contains the business logic, entities, and use cases.</li>
+    <li><strong>Data Layer</strong>: Deals with data management, external resources, and repositories.</li>
+</ul>
+
+<p>Each layer depends only on the layers below it, with the presentation layer depending on the domain layer, and the domain layer depending on the data layer. This structure ensures that the core business logic remains decoupled from any external libraries or frameworks.</p>
+
+<h3>1. The Presentation Layer</h3>
+
+<p>The <strong>Presentation Layer</strong> is responsible for the user interface and user interaction. In a Flutter™ application, this includes widgets, UI logic, and state management. The purpose of this layer is to make sure the user sees the relevant data and can interact with the app in an intuitive way.</p>
+
+<p>In Clean Architecture, the Presentation Layer should not directly interact with the data. Instead, it should rely on state management techniques (like <code>flutter_bloc</code>, <code>Provider</code>, or <code>Riverpod</code>) to fetch data, display it, and handle user actions. The business logic is delegated to the Domain Layer, while the Presentation Layer only focuses on presenting the data and responding to user inputs.</p>
+
+<p>For example, in the context of a Flutter™ app, the Presentation Layer will consist of:</p>
+
+<ul>
+    <li><strong>Widgets</strong>: Flutter™ widgets that display information to the user.</li>
+    <li><strong>State Management</strong>: Using tools like <code>BLoC</code> or <code>Provider</code> to manage the app's state.</li>
+</ul>
+
+<p>By separating the UI and state management from the business logic, this layer can be easily tested, and UI updates will not affect the business logic.</p>
+
+<h3>2. The Domain Layer</h3>
+
+<p>The <strong>Domain Layer</strong> is the heart of the application. This is where the core business logic lives. It is completely independent of any external dependencies, such as databases or APIs, making it easy to test and modify without worrying about the rest of the application.</p>
+
+<p>Key components of the Domain Layer include:</p>
+
+<ul>
+    <li><strong>Entities</strong>: These represent the core business models of the application. They are simple data classes that hold the most important data for the application. For example, in a "counter" app, the counter value could be an entity.</li>
+    <li><strong>Use Cases</strong>: Use cases represent specific business operations that the application performs. They interact with repositories (from the Data Layer) and entities. For example, a use case for incrementing a counter might call a repository method to update the counter value.</li>
+    <li><strong>Repositories</strong>: While technically part of the Data Layer, repositories are used in the Domain Layer as an interface. They are used by use cases to fetch data from the Data Layer and return it as entities.</li>
+</ul>
+
+<p>The Domain Layer ensures that the core functionality of the app is preserved, regardless of changes in the external layers. It is often the most stable part of the app.</p>
+
+<h3>3. The Data Layer</h3>
+
+<p>The <strong>Data Layer</strong> deals with the management of data and external resources. It includes the following components:</p>
+
+<ul>
+    <li><strong>Data Sources</strong>: Data sources are responsible for fetching data from external resources like APIs, local databases, or files. The data source abstracts away the details of how the data is fetched.</li>
+    <li><strong>Repositories</strong>: Repositories in the Data Layer provide an implementation of the repository interface defined in the Domain Layer. They fetch data from one or more data sources and return it in the form of domain entities. The repository serves as the only point of interaction between the Domain Layer and external resources (like APIs or databases).</li>
+    <li><strong>Models</strong>: Models are data structures that represent the data as it is fetched from external sources (like a JSON response from an API). These models are often different from the domain entities because they may contain additional data or format information specific to the source. Models need to be transformed into domain entities before they are passed to the Domain Layer.</li>
+</ul>
+
+<p>The Data Layer ensures that data is retrieved from external sources, transformed into the right format, and passed to the Domain Layer. It isolates the rest of the app from external dependencies, making the system more flexible and testable.</p>
+
+<h3>The Flow of Data in Clean Architecture</h3>
+
+<p>The flow of data in a Clean Architecture app is structured as follows:</p>
+
+<ol>
+    <li>The <strong>Presentation Layer</strong> sends a request to the <strong>Domain Layer</strong> via a use case, asking for some data or an operation to be performed.</li>
+    <li>The <strong>Domain Layer</strong> processes the request and delegates the task to the appropriate repository.</li>
+    <li>The repository calls the <strong>Data Layer</strong> to fetch or update the data.</li>
+    <li>The <strong>Data Layer</strong> returns the data, often transformed into domain entities.</li>
+    <li>The <strong>Domain Layer</strong> sends the data back to the <strong>Presentation Layer</strong>.</li>
+    <li>The <strong>Presentation Layer</strong> updates the UI based on the received data.</li>
+</ol>
+
+<p>This clean separation ensures that each layer has a clear responsibility, and the dependencies flow from the outside in, not the other way around.</p>
+
+<h3>Advantages of Clean Architecture in Flutter™</h3>
+
+<ul>
+    <li><strong>Separation of Concerns</strong>: By splitting the application into different layers, each responsible for a specific aspect, it becomes much easier to manage the complexity as the application grows.</li>
+    <li><strong>Testability</strong>: Since each layer is independent and has clear responsibilities, it’s easier to write unit tests for each part of the system. For instance, the domain logic can be tested without worrying about the UI or external data sources.</li>
+    <li><strong>Scalability</strong>: As your app grows and new features are added, the application remains manageable. You can easily introduce new use cases, modify the UI, or swap data sources without affecting the rest of the system.</li>
+    <li><strong>Maintainability</strong>: With a clear architecture, it’s easier to refactor or modify parts of the application without breaking the rest of the system. For instance, you can change the way data is fetched or displayed without impacting business logic.</li>
+    <li><strong>Reusability</strong>: Since the domain logic is independent of the data and presentation layers, it can be reused across different applications or platforms. For example, the same business logic can be used in both a mobile and a web application.</li>
+</ul>
+
+<h3>Conclusion</h3>
+
+<p>Clean Architecture helps you structure your Flutter™ app in a way that makes it scalable, maintainable, and testable. By separating concerns into distinct layers—<strong>Presentation</strong>, <strong>Domain</strong>, and <strong>Data</strong>—you ensure that your app is flexible enough to grow as your project evolves.</p>
+
+<p>By adhering to Clean Architecture principles, you can build robust Flutter™ applications that are easier to manage and extend, all while maintaining a clean separation of concerns between the various parts of your app.</p>
+
+<p>If you're starting a new Flutter™ project or refactoring an existing one, consider adopting Clean Architecture to take full advantage of these benefits. It will help you maintain a healthy and well-structured codebase for the long term.</p>
+
+<a href="https://github.com/mg3994/takeitall-counter-clean-arch.git" class="download-button" target="_blank">
+    Clean Architecture Flutter™ Project using flutter_bloc and freezed
+</a>
+
+<!-- Include Prism.js for syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-dart.min.js"></script>
+
+<!-- Copy-to-clipboard script -->
+<script>
+    function copyCode(elementId) {
+        const codeElement = document.getElementById(elementId);
+        const text = codeElement.innerText;
+
+        navigator.clipboard.writeText(text).then(() => {
+            // Create a toast element
+            const toast = document.createElement('div');
+            toast.innerText = 'Code copied to clipboard!';
+
+            // Apply styles to position the toast at the bottom center
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.padding = '10px 20px';
+            toast.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            toast.style.color = 'white';
+            toast.style.borderRadius = '5px';
+            toast.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.3)';
+            toast.style.fontSize = '14px';
+            toast.style.zIndex = '1000';
+            toast.style.textAlign = 'center';
+
+            // Append the toast to the body
+            document.body.appendChild(toast);
+
+            // Remove the toast after 2 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        });
+    }
+</script>
+
+<style>
+    .download-button {
+        font-size: 12px; /* Smaller font size */
+        color: #007bff;
+        text-decoration: none;
+        padding: 5px 10px; /* Reduced padding */
+    }
+    .download-button:hover {
+        color: #0056b3; /* Darker blue on hover */
+    }
+</style>
+
+<style>
+    .code-container {
+        position: relative;
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 16px;
+        margin-top: 10px;
+    }
+
+    .copy-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    .copy-button:hover {
+        background-color: #0056b3;
+    }
+
+    pre {
+        overflow-x: auto;
+        margin: 0;
+    }
+
+    code {
+        font-family: 'Courier New', Courier, monospace;
+    }
+</style>
