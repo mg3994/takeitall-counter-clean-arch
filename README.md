@@ -58,11 +58,11 @@ takeitall/
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/mg3994/takeitall-counter-clea-arch.git
+    git clone https://github.com/mg3994/takeitall-counter-clean-arch.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd takeitall-counter-clea-arch
+    cd takeitall-counter-clean-arch
     ```
 3. Get the dependencies:
     ```sh
