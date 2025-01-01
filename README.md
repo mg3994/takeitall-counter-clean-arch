@@ -62,7 +62,7 @@ takeitall/
     ```
 2. Navigate to the project directory:
     ```sh
-    cd takeitall
+    cd takeitall-counter-clea-arch
     ```
 3. Get the dependencies:
     ```sh
